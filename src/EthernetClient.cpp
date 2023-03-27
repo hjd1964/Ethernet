@@ -122,10 +122,12 @@ int EthernetClient::read()
 
 void EthernetClient::flush()
 {
+	unsigned long timeout = millis() + 2000;
 	while (_sockindex < MAX_SOCK_NUM) {
 		uint8_t stat = Ethernet.socketStatus(_sockindex);
 		if (stat != SnSR::ESTABLISHED && stat != SnSR::CLOSE_WAIT) return;
 		if (Ethernet.socketSendAvailable(_sockindex) >= W5100.SSIZE) return;
+		if ((long)millis() - timeout > 0) return;
 	}
 }
 
