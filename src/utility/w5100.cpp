@@ -100,8 +100,11 @@ uint8_t W5100Class::init(void)
 	// reset time, this can be edited or removed.
 	delay(560);
 	//Serial.println("w5100 init");
-
+#ifdef ESP32
+	SPI.begin(14, 12, 13, ss_pin);
+#else
 	SPI.begin();
+#endif
 	initSS();
 	resetSS();
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
